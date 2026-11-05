@@ -176,3 +176,16 @@ function respectSignatureMotion() {
 }
 respectSignatureMotion();
 reducedMotion.addEventListener('change', respectSignatureMotion);
+
+// Decorative star sky.
+const sky = document.createElement('div');
+sky.className = 'star-sky';
+sky.setAttribute('aria-hidden', 'true');
+const starColors = ['blue', 'yellow', 'pink', 'white'];
+for (let i = 0; i < 56; i++) {
+  const star = document.createElement('i');
+  star.className = `sky-star sky-star--${starColors[i % 4]}`;
+  star.style.cssText = `left:${(i * 61.8034 + 3) % 100}%;top:${(i * 37.719 + 2) % 100}%;--size:${10 + (i * 7 % 19)}px;--duration:${9 + i % 9}s;--delay:-${i % 13}s;--drift:${i % 2 ? 9 : -9}px`;
+  sky.append(star);
+}
+document.body.prepend(sky);
