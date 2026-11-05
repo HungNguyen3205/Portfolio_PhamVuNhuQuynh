@@ -30,6 +30,8 @@ function projectCard(project, index) {
   const img = document.createElement('img');
   img.dataset.driveId = project.id;
   img.alt = project.title;
+  img.width = project.width;
+  img.height = project.height;
   img.loading = index < 2 ? 'eager' : 'lazy';
   img.decoding = 'async';
   img.referrerPolicy = 'no-referrer';
