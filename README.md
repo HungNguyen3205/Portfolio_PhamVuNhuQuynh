@@ -6,7 +6,7 @@ Portfolio cá nhân của **Phạm Vũ Như Quỳnh**, sinh viên Đại học D
 
 ```sh
 npm run dev
-# http://localhost:5173
+# http://localhost:5174
 npm run check
 npm run build
 ```
