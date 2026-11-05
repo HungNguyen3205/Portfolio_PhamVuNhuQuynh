@@ -165,3 +165,14 @@ if (contactEntries.length) {
     const a = document.createElement('a'); a.href = type === 'email' ? `mailto:${value}` : value; a.textContent = type === 'email' ? value : `${type} ↗`; if (type !== 'email') { a.target = '_blank'; a.rel = 'noopener noreferrer'; } return a;
   }));
 }
+
+// Keep the supplied clip intact and respect reduced-motion preferences.
+const signatureVideo = document.querySelector('.signature-video');
+function respectSignatureMotion() {
+  if (signatureVideo && reducedMotion.matches) {
+    signatureVideo.autoplay = false;
+    signatureVideo.pause();
+  }
+}
+respectSignatureMotion();
+reducedMotion.addEventListener('change', respectSignatureMotion);
