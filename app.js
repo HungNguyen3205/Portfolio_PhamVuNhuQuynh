@@ -110,15 +110,8 @@ document.addEventListener('click', event => { if (!event.target.closest('.header
 // Scroll-driven archive: poster cards fly outward around the heading, as in the supplied video.
 const flying = projects.slice(0, 4).map((project, index) => {
   const card = document.createElement('div'); card.className = `flying-card flying-${index}`;
-  const img = document.createElement('img'); img.alt = ''; img.loading = 'eager'; img.decoding = 'async'; img.referrerPolicy = 'no-referrer';
-  img.dataset.driveId = project.id;
-  attachImageFallback(img, () => {
-    const fallback = document.createElement('span');
-    fallback.className = 'archive-image-error';
-    fallback.textContent = `${project.title} — Ảnh Drive chưa tải được. Xem tác phẩm bên dưới.`;
-    card.append(fallback);
-  });
-  img.src = imageUrl(project.id, 650);
+  const img = document.createElement('img'); img.src = imageUrl(project.id, 650); img.alt = ''; img.loading = 'lazy'; img.referrerPolicy = 'no-referrer';
+  img.addEventListener('error', () => { card.style.visibility = 'hidden'; });
   card.append(img); $('.flying-works').append(card); return card;
 });
 const archive = $('#archive');
@@ -130,9 +123,9 @@ function updateScroll() {
   framePending = false;
   const maxScroll = document.documentElement.scrollHeight - innerHeight;
   progress.style.transform = `scaleX(${maxScroll > 0 ? scrollY / maxScroll : 0})`;
-  if (reducedMotion.matches) portrait.style.transform = '';
+  if (reducedMotion.matches) { portrait.style.transform = ''; return; }
   const rect = archive.getBoundingClientRect();
-  const amount = reducedMotion.matches ? 1 : clamp((innerHeight * .8 - rect.top) / Math.max(1, rect.height - innerHeight * .2));
+  const amount = clamp((innerHeight * .8 - rect.top) / (rect.height - innerHeight * .2));
   const narrow = innerWidth <= 700;
   const spread = narrow ? innerWidth * .36 : innerWidth * .34;
   const rise = innerHeight * .20;
@@ -145,7 +138,7 @@ function updateScroll() {
     const ty = startY + (y * rise - startY) * amount;
     card.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, 0) rotate(${rotation * amount}deg) scale(${.75 + .25 * amount})`;
   });
-  if (!reducedMotion.matches) portrait.style.transform = `translate3d(0, ${Math.min(scrollY, innerHeight) * .07}px, 0)`;
+  portrait.style.transform = `translate3d(0, ${Math.min(scrollY, innerHeight) * .07}px, 0)`;
 }
 function requestScrollUpdate() { if (!framePending) { framePending = true; requestAnimationFrame(updateScroll); } }
 addEventListener('scroll', requestScrollUpdate, { passive: true });
@@ -192,7 +185,7 @@ const starColors = ['blue', 'yellow', 'pink', 'white'];
 for (let i = 0; i < 56; i++) {
   const star = document.createElement('i');
   star.className = `sky-star sky-star--${starColors[i % 4]}`;
-  star.style.cssText = `left:${(i * 61.8034 + 3) % 100}%;top:${(i * 37.719 + 2) % 100}%;--size:${18 + (i * 7 % 23)}px;--duration:${9 + i % 9}s;--delay:-${i % 13}s;--drift:${i % 2 ? 9 : -9}px`;
+  star.style.cssText = `left:${(i * 61.8034 + 3) % 100}%;top:${(i * 37.719 + 2) % 100}%;--size:${10 + (i * 7 % 19)}px;--duration:${9 + i % 9}s;--delay:-${i % 13}s;--drift:${i % 2 ? 9 : -9}px`;
   sky.append(star);
 }
 document.body.prepend(sky);
